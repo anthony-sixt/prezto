@@ -80,3 +80,8 @@ fi
 # pip
 
 export PIP_DOWNLOAD_CACHE=${XDG_CACHE_HOME:-~/.cache}/pip
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/projects
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_RESPECT_VIRTUALENV=true
+export VIRTUALENV_USE_DISTRIBUTE=true

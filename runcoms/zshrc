@@ -10,4 +10,15 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+# additional keybindings
+bindkey $terminfo[kpp] history-beginning-search-backward
+bindkey $terminfo[knp] history-beginning-search-forward
+
+# some more aliases
+alias cal='cal -m'
+alias 3m='cal -m3'
+alias year='cal -my'
+
+# for compatibility reasons
+alias p='lsarchive'
+alias x='unarchive'
