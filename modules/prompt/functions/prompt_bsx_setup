@@ -1,0 +1,75 @@
+# bsx prompt theme
+
+prompt_bsx_help () {
+  cat <<'EOF'
+This prompt is color-scheme-able.  You can invoke it thus:
+
+  prompt bsx [<promptcolor> [<usercolor> [<rootcolor>]]]
+
+EOF
+}
+
+prompt_bsx_setup () {
+    autoload -U vcs_info
+
+    prompt_bsx_prompt=${1:-'blue'}
+    prompt_bsx_user=${2:-'green'}
+    prompt_bsx_root=${3:-'red'}
+
+    if [[ "$USER" = 'root' ]]; then
+        base_prompt="%B%F{$prompt_bsx_root}%m%k%1v "
+    else
+        base_prompt="%B%F{$prompt_bsx_user}%n@%m%k%1v "
+    fi
+    post_prompt="%b%f%k"
+
+    zstyle ':vcs_info:*' check-for-changes true
+    zstyle ':vcs_info:*' max-exports 3
+    zstyle ':vcs_info:git*' stagedstr "%F{green}*%f"
+    zstyle ':vcs_info:git*' unstagedstr "%F{red}*%f"
+    zstyle ':vcs_info:git*' formats "%F{242}[%s]%f " "%b " "%r/%S "
+    zstyle ':vcs_info:git*' actionformats "%F{242}[%s|%a]%f " "%b " "%r/%S "
+
+    # Set python-info parameters
+    zstyle ':prezto:module:python:info:virtualenv' format '%F{yellow}[%v]%f '
+
+    # Set git-info formats
+    zstyle ':prezto:module:git:info' verbose 'yes'
+    zstyle ':prezto:module:git:info:ahead' format '%%B%A↑%%B '
+    zstyle ':prezto:module:git:info:behind' format '%%B%B↓%%b '
+    zstyle ':prezto:module:git:info:added' format '%%B%F{green}%a+%f%%b '
+    zstyle ':prezto:module:git:info:deleted' format '%%B%F{red}%d-%f%%b '
+    zstyle ':prezto:module:git:info:modified' format '%%B%F{red}%m±%f%%b '
+    zstyle ':prezto:module:git:info:renamed' format '%%B%F{green}%r→%f%%b '
+    zstyle ':prezto:module:git:info:unmerged' format '%%B%F{red}%U⚡%f%%b '
+    zstyle ':prezto:module:git:info:keys' format 'repostatus' '%a%d%m%r%u%A%B'
+
+    add-zsh-hook precmd prompt_bsx_precmd
+}
+
+prompt_bsx_precmd () {
+    # get vcs info
+    vcs_info
+
+    # get python info
+    if (( $+functions[python-info] )); then
+        python-info
+    fi
+
+    # get additional git info
+    if (( $+functions[git-info] )); then
+        git-info
+    fi
+
+    path_prompt="%B%F{$prompt_bsx_prompt}${vcs_info_msg_2_:-%~}%b%f"
+
+    prompt_line_1="${vcs_info_msg_0_}$path_prompt${vcs_info_msg_1_}${git_info:+${(e)git_info[repostatus]}}"
+    prompt_line_2="%(?..%B%F{red}%?%k - )${python_info[virtualenv]}$base_prompt%F{$prompt_bsx_prompt}[%h]❯ $post_prompt"
+
+    PS1="$prompt_line_1$prompt_newline$prompt_line_2"
+    PS2="$base_prompt %_❯ $post_prompt"
+    PS3="$base_prompt ?# $post_prompt"
+    unset RPROMPT
+}
+
+prompt_bsx_setup "$@"
