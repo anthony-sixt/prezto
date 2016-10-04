@@ -41,11 +41,13 @@ typeset -gU cdpath fpath mailpath path
 #   $cdpath
 # )
 
+export GOPATH=$HOME/go
+
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
-  ~/bin
   /sbin
+  $GOPATH/bin
   $path
 )
 
