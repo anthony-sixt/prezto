@@ -22,3 +22,9 @@ alias year='cal -my'
 # for compatibility reasons
 alias p='lsarchive'
 alias x='unarchive'
+
+# shortcuts
+alias kubectx="kubectl config use-context"
+
+# more completion
+source <(kubectl completion zsh)
