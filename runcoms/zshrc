@@ -11,6 +11,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # additional keybindings
+bindkey "^A" vi-beginning-of-line
 bindkey $terminfo[kpp] history-beginning-search-backward
 bindkey $terminfo[knp] history-beginning-search-forward
 
